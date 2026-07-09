@@ -1,0 +1,238 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 20% 98%;
+    --foreground: 220 20% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 10%;
+    --muted: 40 10% 94%;
+    --muted-foreground: 220 8% 46%;
+    --border: 40 8% 88%;
+    --ring: 210 100% 40%;
+    --accent: 210 100% 40%;
+    --accent-foreground: 0 0% 100%;
+    --surface-elevated: 0 0% 100%;
+    --sidebar: 40 15% 96%;
+  }
+
+  * {
+    @apply border-[hsl(var(--border))];
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    @apply bg-[hsl(var(--background))] text-[hsl(var(--foreground))] antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  ::selection {
+    @apply bg-linkedin/15 text-ink;
+  }
+
+  textarea:focus-visible,
+  input:focus-visible,
+  button:focus-visible,
+  select:focus-visible {
+    @apply outline-none ring-2 ring-linkedin/30 ring-offset-2 ring-offset-[hsl(var(--background))];
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-card;
+  }
+
+  .panel-header {
+    @apply flex items-center justify-between border-b border-[hsl(var(--border))] px-5 py-4;
+  }
+
+  .panel-body {
+    @apply p-5;
+  }
+
+  .input-field {
+    @apply w-full resize-none rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))]
+      px-4 py-3 text-sm leading-relaxed text-ink placeholder:text-ink-subtle
+      transition-colors duration-200 hover:border-ink-subtle/40 focus:border-linkedin/40;
+  }
+
+  .btn-primary {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg
+      bg-linkedin px-5 py-2.5 text-sm font-medium text-white
+      transition-all duration-200 hover:bg-linkedin-dark
+      active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg
+      border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4 py-2 text-sm font-medium
+      text-ink transition-all duration-200 hover:border-ink-subtle/40 hover:bg-[hsl(var(--muted))]
+      active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-ghost {
+    @apply inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-md
+      px-2.5 py-1.5 text-xs font-medium text-ink-muted
+      transition-colors duration-200 hover:bg-[hsl(var(--muted))] hover:text-ink;
+  }
+
+  .tone-chip {
+    @apply cursor-pointer rounded-full border border-[hsl(var(--border))] px-3 py-1.5
+      text-xs font-medium text-ink-muted transition-all duration-200
+      hover:border-linkedin/30 hover:text-ink;
+  }
+
+  .tone-chip-active {
+    @apply border-linkedin/40 bg-linkedin/10 text-linkedin;
+  }
+
+  .score-bar {
+    @apply h-1.5 overflow-hidden rounded-full bg-[hsl(var(--muted))];
+  }
+
+  .tab-trigger {
+    @apply cursor-pointer border-b-2 border-transparent px-4 py-3 text-sm font-medium
+      text-ink-muted transition-colors duration-200 hover:text-ink;
+  }
+
+  .tab-trigger-active {
+    @apply border-linkedin text-ink;
+  }
+
+  /* ── Studio theme — warm charcoal, not pure black ── */
+  .studio-theme {
+    @apply bg-[#161618] text-[#F4F4F5];
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(212, 168, 83, 0.08), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 100%, rgba(78, 205, 196, 0.05), transparent);
+  }
+
+  .studio-theme ::selection {
+    @apply bg-[#D4A853]/25 text-[#FAFAF9];
+  }
+
+  .studio-theme textarea:focus-visible,
+  .studio-theme input:focus-visible,
+  .studio-theme button:focus-visible {
+    @apply ring-[#D4A853]/30 ring-offset-[#161618];
+  }
+
+  .studio-theme .panel {
+    @apply rounded-2xl border-[#2a2a2e] bg-[#1e1e22] shadow-sm shadow-black/20;
+  }
+
+  .studio-theme .panel-header {
+    @apply border-[#2a2a2e];
+  }
+
+  .studio-theme .input-field {
+    @apply rounded-xl border-[#2a2a2e] bg-[#242428] text-[#F4F4F5]
+      placeholder:text-[#71717a] hover:border-[#3f3f46] focus:border-[#D4A853]/50 focus:bg-[#28282c];
+  }
+
+  .studio-theme .btn-primary {
+    @apply rounded-xl bg-[#D4A853] font-semibold text-[#1a1a1a]
+      hover:bg-[#E8C876] hover:shadow-md hover:shadow-[#D4A853]/20;
+  }
+
+  .studio-theme .btn-secondary {
+    @apply rounded-xl border-[#2a2a2e] bg-[#1e1e22] text-[#F4F4F5]
+      hover:border-[#3f3f46] hover:bg-[#242428];
+  }
+
+  .studio-theme .btn-ghost {
+    @apply text-[#a1a1aa] hover:bg-[#242428] hover:text-[#F4F4F5];
+  }
+
+  .studio-theme .studio-surface {
+    @apply bg-[#1e1e22] border-[#2a2a2e];
+  }
+
+  .studio-theme .studio-sidebar {
+    @apply bg-[#1a1a1d]/80 backdrop-blur-sm;
+  }
+
+  .studio-theme .studio-canvas {
+    @apply bg-[#18181b]/60;
+  }
+
+  .studio-theme .tone-chip {
+    @apply border-white/[0.08] text-[#8A8A8E] hover:border-[#D4A853]/30 hover:text-[#FAFAF9];
+  }
+
+  .studio-theme .tone-chip-active {
+    @apply border-[#D4A853]/40 bg-[#D4A853]/10 text-[#D4A853];
+  }
+
+  .studio-theme .tab-trigger {
+    @apply text-[#8A8A8E] hover:text-[#FAFAF9];
+  }
+
+  .studio-theme .tab-trigger-active {
+    @apply border-[#D4A853] text-[#FAFAF9];
+  }
+
+  .studio-theme .score-bar {
+    @apply bg-white/[0.08];
+  }
+
+  .studio-theme .scrollbar-thin {
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+  }
+
+  .studio-theme .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-white/10;
+  }
+
+  .studio-theme .text-ink {
+    @apply text-[#FAFAF9];
+  }
+
+  .studio-theme .text-ink-muted {
+    @apply text-[#8A8A8E];
+  }
+
+  .studio-theme .text-ink-subtle {
+    @apply text-[#8A8A8E]/60;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-[hsl(var(--border))];
+  }
+}
