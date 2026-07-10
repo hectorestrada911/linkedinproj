@@ -1,25 +1,31 @@
 "use client";
 
+import type { SourceMode } from "@/components/input-panel";
+
 interface StudioProgressProps {
-  hasNews: boolean;
-  hasTranscript: boolean;
+  sourceMode: SourceMode;
+  hasSource: boolean;
   hasOutput: boolean;
 }
 
-export function StudioProgress({ hasNews, hasTranscript, hasOutput }: StudioProgressProps) {
-  if (hasOutput) return null;
+const MODE_HINT: Record<SourceMode, string> = {
+  paste: "Paste headlines, notes, or a transcript",
+  search: "Search and select an AI news story",
+  angle: "Describe your topic, then auto-find an angle",
+};
 
-  const ready = hasNews || hasTranscript;
+export function StudioProgress({ sourceMode, hasSource, hasOutput }: StudioProgressProps) {
+  if (hasOutput) return null;
 
   return (
     <div className="px-5 pb-1 pt-0.5">
       <p className="text-[12px] text-[#71717a]">
-        {ready ? (
+        {hasSource ? (
           <>
             <span className="text-[#4ECDC4]">●</span> Ready to generate
           </>
         ) : (
-          "Add source material to get started"
+          MODE_HINT[sourceMode]
         )}
       </p>
     </div>

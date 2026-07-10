@@ -1,32 +1,38 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { LANDING_IMAGES } from "@/lib/landing-images";
 
 const FEATURES = [
   {
     id: "sources",
     label: "Sources",
-    headline: "AI news meets internal context",
-    body: "Paste headlines or fetch live news. Add a team transcript. SignalPost finds the angle only you can tell.",
+    headline: "Three input modes",
+    body: "Paste Source, Search AI News, or Auto-Find Angle — pick what fits the moment.",
+    image: LANDING_IMAGES.pasteSource,
   },
   {
     id: "analysis",
     label: "Analysis",
     headline: "Extract what matters",
-    body: "Key facts, pain points, and a combined content angle connecting industry momentum to your workflow.",
+    body: "Key facts, pain points, and a combined content angle from your inputs.",
+    image: LANDING_IMAGES.searchNews,
   },
   {
-    id: "tone",
+    id: "voice",
     label: "Voice",
     headline: "Seven tone modes",
-    body: "Founder, technical, contrarian, concise — each with distinct rhythm and credibility.",
+    body: "Founder, technical, contrarian — each with distinct rhythm and credibility.",
+    image: LANDING_IMAGES.findAngle,
   },
   {
-    id: "package",
+    id: "output",
     label: "Output",
     headline: "Full publish package",
-    body: "Post, hooks, CTA, hashtags, image prompt, carousel, video script, strategy notes, and post score.",
+    body: "Post, hooks, CTA, hashtags, strategy notes, and post score.",
+    image: LANDING_IMAGES.output,
   },
 ];
 
@@ -38,31 +44,44 @@ export function FeatureExplorer() {
     <section className="border-t border-[#2a2a2e] bg-[#161618] py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-6">
         <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[#F4F4F5] sm:text-4xl">
-          How it works
+          Inside the studio
         </h2>
 
-        <div className="mt-10 grid gap-10 lg:grid-cols-[200px_1fr] lg:gap-16">
-          <nav className="flex flex-row gap-1 overflow-x-auto lg:flex-col lg:overflow-visible">
-            {FEATURES.map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => setActiveId(f.id)}
-                className={cn(
-                  "shrink-0 px-3 py-2 text-left text-[14px] transition-colors lg:px-0",
-                  activeId === f.id
-                    ? "font-medium text-[#F4F4F5]"
-                    : "text-[#71717a] hover:text-[#a1a1aa]"
-                )}
-              >
-                {f.label}
-              </button>
-            ))}
-          </nav>
+        <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+          <div>
+            <nav className="flex flex-wrap gap-x-4 gap-y-2 border-b border-[#2a2a2e] pb-6 lg:flex-col lg:border-b-0 lg:pb-0">
+              {FEATURES.map((f) => (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setActiveId(f.id)}
+                  className={cn(
+                    "text-left text-[14px] transition-colors",
+                    activeId === f.id
+                      ? "font-medium text-[#F4F4F5]"
+                      : "text-[#71717a] hover:text-[#a1a1aa]"
+                  )}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </nav>
 
-          <div className="border-t border-[#2a2a2e] pt-8 lg:border-l lg:border-t-0 lg:pl-16 lg:pt-0">
-            <h3 className="text-xl font-semibold text-[#F4F4F5] sm:text-2xl">{active.headline}</h3>
-            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-[#a1a1aa]">{active.body}</p>
+            <div className="mt-8 lg:mt-10">
+              <h3 className="text-xl font-semibold text-[#F4F4F5] sm:text-2xl">{active.headline}</h3>
+              <p className="mt-4 max-w-md text-[15px] leading-relaxed text-[#a1a1aa]">{active.body}</p>
+            </div>
+          </div>
+
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-[#2a2a2e]">
+            <Image
+              key={active.id}
+              src={active.image.src}
+              alt={active.image.alt}
+              fill
+              className="object-cover animate-fade-in"
+              sizes="(max-width: 1024px) 100vw, 560px"
+            />
           </div>
         </div>
       </div>
@@ -72,31 +91,28 @@ export function FeatureExplorer() {
 
 export function StatSection() {
   return (
-    <section className="border-t border-[#2a2a2e] bg-[#161618] py-20 sm:py-28">
+    <section className="border-t border-[#2a2a2e] bg-[#121214] py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="max-w-2xl">
-          <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold leading-tight text-[#F4F4F5] sm:text-4xl">
-            Context preservation, not content spam
-          </h2>
-          <p className="mt-5 text-[16px] leading-relaxed text-[#a1a1aa]">
-            Most AI writing tools optimize for speed. SignalPost connects what your team
-            knows internally to what&apos;s happening in the industry — then packages the
-            result for LinkedIn.
-          </p>
-          <ul className="mt-8 space-y-3 text-[15px] text-[#d4d4d8]">
-            <li className="flex gap-3">
-              <span className="text-[#71717a]">—</span>
-              7 tone modes tuned for different voices
-            </li>
-            <li className="flex gap-3">
-              <span className="text-[#71717a]">—</span>
-              12+ deliverables per generation
-            </li>
-            <li className="flex gap-3">
-              <span className="text-[#71717a]">—</span>
-              Works with or without an API key (demo mode)
-            </li>
-          </ul>
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+          <div>
+            <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold leading-tight text-[#F4F4F5] sm:text-4xl">
+              Built for operators who ship
+            </h2>
+            <ul className="mt-8 space-y-4 text-[15px] text-[#d4d4d8]">
+              <li className="border-l-2 border-[#3f3f46] pl-4">7 tone modes tuned for different voices</li>
+              <li className="border-l-2 border-[#3f3f46] pl-4">12+ deliverables per generation</li>
+              <li className="border-l-2 border-[#3f3f46] pl-4">Works without an API key in demo mode</li>
+            </ul>
+          </div>
+          <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-[#2a2a2e]">
+            <Image
+              src={LANDING_IMAGES.cta.src}
+              alt={LANDING_IMAGES.cta.alt}
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+          </div>
         </div>
       </div>
     </section>

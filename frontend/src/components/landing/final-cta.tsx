@@ -1,33 +1,41 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 
 export function FinalCTA() {
   return (
-    <section className="border-t border-white/[0.06] bg-[#0a0a0b] py-24 sm:py-32">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="relative overflow-hidden rounded-3xl border border-[#D4A853]/20 bg-gradient-to-br from-[#141416] via-[#141416] to-[#1a1814] px-8 py-16 sm:px-16 sm:py-20">
-          <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-[#D4A853]/10 blur-[80px]" />
+    <section className="border-t border-[#2a2a2e] bg-[#121214]">
+      <div className="relative mx-auto max-w-6xl overflow-hidden px-6 py-24 sm:py-32">
+        <div className="relative overflow-hidden rounded-2xl border border-[#2a2a2e]">
+          <div className="absolute inset-0">
+            <Image
+              src="/images/landing/cta.jpg"
+              alt="Workspace"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1152px) 100vw, 1152px"
+            />
+            <div className="absolute inset-0 bg-[#121214]/75" />
+          </div>
 
-          <div className="relative max-w-xl">
-            <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[#FAFAF9] sm:text-4xl">
-              Your next post is one conversation away
+          <div className="relative px-8 py-16 sm:px-14 sm:py-20">
+            <h2 className="max-w-lg font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[#F4F4F5] sm:text-4xl">
+              Try it with sample data in under a minute
             </h2>
-            <p className="mt-4 text-[15px] leading-relaxed text-[#8A8A8E]">
-              Load the sample data, pick a tone, and generate your first content package in
-              under a minute. No API key required.
+            <p className="mt-4 max-w-md text-[15px] leading-relaxed text-[#a1a1aa]">
+              Load sample sources, pick a voice, generate your first package. No API key
+              required.
             </p>
             <Link
               href="/studio"
-              className="group mt-8 inline-flex items-center gap-2 rounded-lg bg-[#D4A853] px-7 py-3.5 text-[14px] font-semibold text-[#0a0a0b] transition-all hover:bg-[#E8C876] hover:shadow-lg hover:shadow-[#D4A853]/20"
+              className="mt-8 inline-block rounded-lg bg-[#F4F4F5] px-6 py-3 text-[14px] font-medium text-[#121214] transition-colors hover:bg-white"
             >
-              Launch Studio
-              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              Open Studio
             </Link>
           </div>
         </div>
 
-        <p className="mt-10 text-center text-[12px] text-[#8A8A8E]/60">
-          SignalPost · Engineering demo · Built for LinkedIn creators
+        <p className="mt-10 text-center text-[12px] text-[#71717a]">
+          SignalPost · Engineering demo
         </p>
       </div>
     </section>

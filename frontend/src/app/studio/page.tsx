@@ -9,13 +9,50 @@ import { StudioProgress } from "@/components/studio/studio-progress";
 import type { ContentPackage, GenerateResponse, RewriteAction } from "@/types";
 
 const DEFAULT_FORM: InputFormState = {
+  sourceMode: "paste",
+  pasteSource: "",
   aiNews: "",
   transcript: "",
+  suggestedAngle: "",
+  angleRationale: "",
+  angleMode: null,
   topic: "",
   audience: "",
   tone: "founder",
   generateImage: false,
 };
+
+function buildGeneratePayload(form: InputFormState) {
+  let aiNews = form.aiNews;
+  let transcript = form.transcript;
+
+  if (form.sourceMode === "paste" && form.pasteSource.trim()) {
+    const parts = form.pasteSource.split(/\n\n+/);
+    const newsPart = parts.find(
+      (p) => p.trim().startsWith("[") || /^(TechCrunch|Reuters|Bloomberg|The Verge)/i.test(p.trim())
+    );
+    const convParts = parts.filter((p) => p !== newsPart);
+    aiNews = newsPart?.trim() || aiNews;
+    transcript = convParts.join("\n\n").trim() || form.pasteSource;
+  }
+
+  return {
+    aiNews,
+    transcript,
+    topic: form.topic || undefined,
+    audience: form.audience || undefined,
+    tone: form.tone,
+    generateImage: form.generateImage,
+  };
+}
+
+function hasSourceMaterial(form: InputFormState): boolean {
+  return (
+    form.pasteSource.trim().length > 0 ||
+    form.aiNews.trim().length > 0 ||
+    form.transcript.trim().length > 0
+  );
+}
 
 export default function StudioPage() {
   const [form, setForm] = useState<InputFormState>(DEFAULT_FORM);
@@ -34,9 +71,7 @@ export default function StudioPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            ...form,
-            topic: form.topic || undefined,
-            audience: form.audience || undefined,
+            ...buildGeneratePayload(form),
             ...overrides,
           }),
         });
@@ -62,7 +97,7 @@ export default function StudioPage() {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
         e.preventDefault();
-        if (!loading && (form.aiNews.trim() || form.transcript.trim())) generate();
+        if (!loading && hasSourceMaterial(form)) generate();
       }
     };
     window.addEventListener("keydown", onKey);
@@ -74,8 +109,8 @@ export default function StudioPage() {
       <StudioHeader mode={mode} score={pkg?.postScore.overall ?? null} />
 
       <StudioProgress
-        hasNews={form.aiNews.trim().length > 0}
-        hasTranscript={form.transcript.trim().length > 0}
+        sourceMode={form.sourceMode}
+        hasSource={hasSourceMaterial(form)}
         hasOutput={!!pkg}
       />
 
@@ -85,7 +120,6 @@ export default function StudioPage() {
         </div>
       )}
 
-      {/* Two-pane workspace */}
       <div className="mx-auto grid w-full max-w-6xl flex-1 grid-cols-1 overflow-hidden px-4 pb-4 pt-3 lg:grid-cols-[400px_1fr] lg:gap-4">
         <aside className="studio-sidebar flex min-h-0 flex-col overflow-hidden rounded-2xl border border-[#2a2a2e] shadow-lg shadow-black/20">
           <InputPanel

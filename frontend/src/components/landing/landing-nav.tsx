@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
+  { label: "Sources", href: "#sources" },
   { label: "Workflow", href: "#workflow" },
   { label: "Capabilities", href: "#capabilities" },
 ];
@@ -14,7 +14,7 @@ export function LandingNav() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -23,26 +23,15 @@ export function LandingNav() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-        scrolled ? "px-4 pt-3" : "px-0 pt-0"
+        "fixed inset-x-0 top-0 z-50 border-b transition-colors duration-300",
+        scrolled
+          ? "border-[#2a2a2e] bg-[#121214]/90 backdrop-blur-md"
+          : "border-transparent bg-transparent"
       )}
     >
-      <nav
-        className={cn(
-          "mx-auto flex h-14 items-center justify-between transition-all duration-300",
-          scrolled
-            ? "max-w-5xl rounded-full border border-white/[0.08] bg-[#0a0a0b]/85 px-5 shadow-lg shadow-black/20 backdrop-blur-xl"
-            : "max-w-6xl px-6"
-        )}
-      >
-        <Link href="/" className="group flex items-center gap-2.5">
-          <span className="relative flex h-7 w-7 items-center justify-center">
-            <span className="absolute inset-0 rounded-md bg-[#D4A853]/20" />
-            <span className="relative h-2 w-2 rounded-full bg-[#D4A853]" />
-          </span>
-          <span className="text-[15px] font-semibold tracking-tight text-white">
-            Signal<span className="text-[#D4A853]">Post</span>
-          </span>
+      <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
+        <Link href="/" className="text-[15px] font-semibold tracking-tight text-[#F4F4F5]">
+          SignalPost
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">
@@ -50,7 +39,7 @@ export function LandingNav() {
             <Link
               key={item.href}
               href={item.href}
-              className="text-[13px] text-white/70 transition-colors hover:text-white"
+              className="text-[13px] text-[#a1a1aa] transition-colors hover:text-[#F4F4F5]"
             >
               {item.label}
             </Link>
@@ -59,15 +48,9 @@ export function LandingNav() {
 
         <Link
           href="/studio"
-          className={cn(
-            "group inline-flex items-center gap-1.5 text-[13px] font-semibold transition-all",
-            scrolled
-              ? "rounded-full bg-[#D4A853] px-4 py-2 text-[#0a0a0b] hover:bg-[#E8C876]"
-              : "rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-white backdrop-blur-sm hover:bg-white/20"
-          )}
+          className="rounded-lg bg-[#F4F4F5] px-4 py-2 text-[13px] font-medium text-[#121214] transition-colors hover:bg-white"
         >
-          Launch Studio
-          <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          Open Studio
         </Link>
       </nav>
     </header>
