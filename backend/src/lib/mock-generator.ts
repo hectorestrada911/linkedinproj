@@ -35,7 +35,7 @@ export function generateMockPackage(req: GenerateRequest): ContentPackage {
 
   const extractedInsight =
     painPoints.length > 0
-      ? `The real challenge isn't generating text — it's preserving the nuance, tone, and strategic context from internal conversations when connecting them to external trends.`
+      ? `The real challenge isn't generating text, it's preserving the nuance, tone, and strategic context from internal conversations when connecting them to external trends.`
       : `The intersection of breaking AI news and internal team knowledge creates a unique content angle that generic AI tools miss entirely.`;
 
   const aiNewsAngle = `While everyone is discussing "${newsHeadline.slice(0, 60)}...", the teams that win won't be the ones with the newest model. They'll be the ones who can connect industry shifts to their own operational reality.`;
@@ -47,7 +47,7 @@ export function generateMockPackage(req: GenerateRequest): ContentPackage {
 
 Here's what I've learned building content workflows:
 
-→ The gap isn't intelligence — it's context transfer
+→ The gap isn't intelligence, it's context transfer
 → Meeting notes contain 10x more insight than any news article
 → But connecting internal pain to external trends? That's where most content falls flat
 
@@ -55,17 +55,17 @@ ${primaryPain ? `We felt this directly: ${primaryPain}.` : ""}
 
 The teams shipping the best LinkedIn content right now aren't using AI to write faster.
 
-They're using it to think clearer — connecting what they're building to what's changing in the industry.`;
+They're using it to think clearer: connecting what they're building to what's changing in the industry.`;
 
   const cta =
     tone === "contrarian"
-      ? "Agree or disagree — what's the biggest gap in your content workflow?"
+      ? "Agree or disagree: what's the biggest gap in your content workflow?"
       : "What's your team's biggest bottleneck: generating content or preserving context?";
 
   const finalPost = `${hook}\n\n${mainBody}\n\n${cta}`;
 
   const alternateVersions = [
-    `${newsHeadline}\n\nEveryone's talking about the technology. Nobody's talking about the workflow problem it creates.\n\nWe spent months trying to turn meeting notes into posts. The issue was never the writing — it was losing the "why" behind the discussion.\n\n${cta}`,
+    `${newsHeadline}\n\nEveryone's talking about the technology. Nobody's talking about the workflow problem it creates.\n\nWe spent months trying to turn meeting notes into posts. The issue was never the writing, it was losing the "why" behind the discussion.\n\n${cta}`,
     `Unpopular opinion: AI content tools are solving the wrong problem.\n\nYou don't need more words. You need better connections between what your team knows and what the market cares about.\n\n${cta}`,
   ];
 
@@ -120,9 +120,9 @@ They're using it to think clearer — connecting what they're building to what's
     },
     contentStrategy: {
       whyThisAngle:
-        "Combines timely news relevance with authentic internal perspective — the formula that performs best for B2B thought leadership.",
+        "Combines timely news relevance with authentic internal perspective, the formula that performs best for B2B thought leadership.",
       targetAudience: req.audience || "Founders, VP Product, and AI operators at Series A–C startups",
-      emotionalAngle: "Recognition — 'finally someone said what I've been thinking'",
+      emotionalAngle: "Recognition: 'finally someone said what I've been thinking'",
       credibilityAngle: "Grounded in real team conversations, not generic AI commentary",
       suggestedPostingStyle: "Post Tuesday–Thursday, 8–10 AM. Lead with the hook, add image on slide 2 if using carousel.",
     },

@@ -72,6 +72,8 @@ export interface ContentPackage {
 export interface GenerateRequest extends GenerationInput {
   rewriteAction?: RewriteAction;
   previousPackage?: ContentPackage;
+  generateImage?: boolean;
+  sourceImageUrl?: string;
 }
 
 export interface NewsItem {
@@ -81,6 +83,17 @@ export interface NewsItem {
   source: string;
   publishedAt: string;
   category: string;
+  url?: string;
+  imageUrl?: string;
+}
+
+export interface ArticlePreview {
+  url: string;
+  title: string;
+  description: string;
+  imageUrl?: string;
+  source?: string;
+  publishedAt?: string;
 }
 
 export interface GenerateResponse {

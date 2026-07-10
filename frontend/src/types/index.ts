@@ -81,6 +81,17 @@ export interface NewsItem {
   source: string;
   publishedAt: string;
   category: string;
+  url?: string;
+  imageUrl?: string;
+}
+
+export interface ArticlePreview {
+  url: string;
+  title: string;
+  description: string;
+  imageUrl?: string;
+  source?: string;
+  publishedAt?: string;
 }
 
 export interface GenerateResponse {

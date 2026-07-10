@@ -38,6 +38,7 @@ const config: Config = {
         "fade-in": "fadeIn 0.4s ease-out",
         "slide-up": "slideUp 0.5s ease-out",
         "pulse-soft": "pulseSoft 2s ease-in-out infinite",
+        "hero-drift": "heroDrift 28s ease-in-out infinite alternate",
       },
       keyframes: {
         fadeIn: {
@@ -51,6 +52,10 @@ const config: Config = {
         pulseSoft: {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.6" },
+        },
+        heroDrift: {
+          "0%": { transform: "scale(1) translate(0, 0)" },
+          "100%": { transform: "scale(1.06) translate(-1%, -0.5%)" },
         },
       },
     },

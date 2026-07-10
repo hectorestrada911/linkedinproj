@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 
 export interface AngleResult {
@@ -62,6 +62,9 @@ export function AngleFinder({
     }
   }
 
+  const fieldClass =
+    "w-full rounded-md border border-[#27272a] bg-[#09090b] px-3 py-2.5 text-[14px] text-[#fafafa] placeholder:text-[#52525b] focus:border-[#52525b] focus:outline-none";
+
   return (
     <div className="space-y-3">
       <input
@@ -69,53 +72,47 @@ export function AngleFinder({
         value={topic}
         onChange={(e) => onTopicChange(e.target.value)}
         placeholder="What are you building or writing about?"
-        className="input-field py-2 text-[13px]"
+        className={fieldClass}
       />
       <input
         type="text"
         value={audience}
         onChange={(e) => onAudienceChange(e.target.value)}
         placeholder="Target audience (optional)"
-        className="input-field py-2 text-[13px]"
+        className={fieldClass}
       />
       <textarea
         rows={3}
         value={sourceText}
         onChange={(e) => onSourceTextChange(e.target.value)}
-        placeholder="Optional — paste notes or context to sharpen the angle"
-        className="input-field min-h-[80px] text-[12px]"
+        placeholder="Optional context: notes, transcript, or background"
+        className={`${fieldClass} min-h-[80px] resize-none`}
       />
 
       <button
         type="button"
         onClick={findAngle}
-        disabled={loading}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[#D4A853]/40 bg-[#D4A853]/10 py-2.5 text-[13px] font-medium text-[#E8C876] transition-colors hover:bg-[#D4A853]/15 disabled:opacity-50"
+        disabled={loading || !topic.trim()}
+        className="w-full rounded-md border border-[#27272a] py-2.5 text-[13px] text-[#fafafa] hover:bg-[#18181b] disabled:opacity-40"
       >
         {loading ? (
-          <>
+          <span className="inline-flex items-center justify-center gap-2">
             <Loader2 className="h-4 w-4 animate-spin" />
             Finding angle…
-          </>
+          </span>
         ) : (
-          <>
-            <Sparkles className="h-4 w-4" />
-            Auto-find angle
-          </>
+          "Find angle"
         )}
       </button>
 
-      {error && <p className="text-[12px] text-[#E85D4C]">{error}</p>}
+      {error && <p className="text-[12px] text-[#ef4444]">{error}</p>}
 
       {result && (
-        <div className="space-y-3 rounded-lg border border-[#2a2a2e] bg-[#242428] p-3">
-          <div>
-            <p className="text-[10px] font-medium uppercase tracking-wider text-[#71717a]">Suggested angle</p>
-            <p className="mt-1 text-[13px] leading-relaxed text-[#F4F4F5]">{result.angle}</p>
-          </div>
-          <p className="text-[11px] text-[#71717a]">{result.rationale}</p>
-          <p className="text-[10px] text-[#71717a]">
-            News + transcript populated — hit Generate when ready
+        <div className="rounded-md border border-[#27272a] p-4">
+          <p className="text-[13px] leading-relaxed text-[#fafafa]">{result.angle}</p>
+          <p className="mt-2 text-[12px] leading-relaxed text-[#52525b]">{result.rationale}</p>
+          <p className="mt-3 text-[11px] text-[#52525b]">
+            Source populated. Hit Generate when ready
             {result.mode === "mock" && " · demo mode"}
           </p>
         </div>

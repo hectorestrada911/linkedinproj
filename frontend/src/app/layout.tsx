@@ -21,7 +21,7 @@ const displayFont = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
-  title: "SignalPost — LinkedIn Content Generator",
+  title: "SignalPost | LinkedIn Content Generator",
   description:
     "Transform AI news and conversation transcripts into publish-ready LinkedIn content packages.",
 };

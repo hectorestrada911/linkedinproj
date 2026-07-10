@@ -35,7 +35,7 @@ CRITICAL RULES:
 - NEVER start with "I'm excited to share" or "Hot take:"
 - Write like someone who actually builds things and has opinions
 - Connect the transcript insight to the news angle in a non-obvious way
-- Hooks must create curiosity or tension — not clickbait
+- Hooks must create curiosity or tension, not clickbait
 - LinkedIn posts should be scannable: short paragraphs, line breaks, maybe 1-2 bullet points max
 - Hashtags: 4-6 relevant ones, mix of broad and niche
 - Image prompts should be specific, editorial, not stock-photo generic
@@ -50,10 +50,10 @@ export function buildUserPrompt(req: GenerateRequest): string {
   let prompt = `Generate a complete LinkedIn content package.
 
 ## AI News / Source Material
-${req.aiNews || "(none provided — infer from transcript context)"}
+${req.aiNews || "(none provided, infer from transcript context)"}
 
 ## Conversation Transcript
-${req.transcript || "(none provided — focus on news angle)"}
+${req.transcript || "(none provided, focus on news angle)"}
 
 ## Target Topic
 ${req.topic || "Auto-detect from sources"}

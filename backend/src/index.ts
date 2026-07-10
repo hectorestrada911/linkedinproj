@@ -4,6 +4,8 @@ import express from "express";
 import { generateRouter } from "./routes/generate";
 import { newsRouter } from "./routes/news";
 import { angleRouter } from "./routes/angle";
+import { articleRouter } from "./routes/article";
+import { documentRouter } from "./routes/document";
 
 const app = express();
 const port = Number(process.env.PORT) || 4000;
@@ -18,6 +20,8 @@ app.get("/health", (_req, res) => {
 
 app.use("/api/generate", generateRouter);
 app.use("/api/news", newsRouter);
+app.use("/api/article", articleRouter);
+app.use("/api/document", documentRouter);
 app.use("/api/angle", angleRouter);
 
 app.listen(port, () => {

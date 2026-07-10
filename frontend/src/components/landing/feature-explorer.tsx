@@ -10,7 +10,7 @@ const FEATURES = [
     id: "sources",
     label: "Sources",
     headline: "Three input modes",
-    body: "Paste Source, Search AI News, or Auto-Find Angle — pick what fits the moment.",
+    body: "Paste Source, Search AI News, or Auto-Find Angle. Pick what fits the moment.",
     image: LANDING_IMAGES.pasteSource,
   },
   {
@@ -24,7 +24,7 @@ const FEATURES = [
     id: "voice",
     label: "Voice",
     headline: "Seven tone modes",
-    body: "Founder, technical, contrarian — each with distinct rhythm and credibility.",
+    body: "Founder, technical, contrarian. Each with distinct rhythm and credibility.",
     image: LANDING_IMAGES.findAngle,
   },
   {

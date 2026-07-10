@@ -40,15 +40,23 @@ export function OutputPanel({
   const [tab, setTab] = useState<Tab>("post");
 
   if (loading) {
-    return <LoadingState />;
+    return (
+      <div className="relative z-10 flex h-full flex-col">
+        <LoadingState />
+      </div>
+    );
   }
 
   if (!pkg) {
-    return <EmptyState />;
+    return (
+      <div className="relative z-10 flex h-full flex-col">
+        <EmptyState />
+      </div>
+    );
   }
 
   return (
-    <div className="flex h-full flex-col overflow-hidden">
+    <div className="relative z-10 flex h-full flex-col overflow-hidden">
       <div className="flex shrink-0 items-center justify-between border-b border-[#2a2a2e] px-5 py-4">
         <div>
           <h2 className="text-[15px] font-semibold text-[#FAFAF9]">Content package</h2>
@@ -229,37 +237,53 @@ export function OutputPanel({
 }
 
 function EmptyState() {
+  const outputs = ["Post", "Hooks", "Strategy", "Score", "Hashtags", "Export"];
+
   return (
-    <div className="flex h-full items-center justify-center p-8">
-      <div className="w-full max-w-lg">
-        <div className="overflow-hidden rounded-2xl border border-[#2a2a2e] bg-[#1e1e22] shadow-xl shadow-black/25">
-          <div className="border-b border-[#2a2a2e] px-5 py-3">
-            <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-[#0A66C2]" />
-              <span className="text-[13px] font-medium text-[#d4d4d8]">LinkedIn preview</span>
+    <div className="relative flex h-full items-center justify-center overflow-hidden p-8">
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#38bdf8]/[0.05] blur-[120px]" />
+
+      <div className="relative w-full max-w-md">
+        {/* Ghost LinkedIn preview */}
+        <div className="overflow-hidden rounded-xl border border-[#27272a] bg-[#0c0c0e]/80 shadow-[0_8px_40px_rgba(0,0,0,0.4)] backdrop-blur-sm">
+          <div className="border-b border-[#27272a] px-4 py-3">
+            <div className="flex items-center gap-3">
+              <div className="h-9 w-9 rounded-full bg-gradient-to-br from-[#38bdf8]/30 to-[#0ea5e9]/20" />
+              <div className="space-y-1.5">
+                <div className="h-2.5 w-24 rounded bg-[#27272a]" />
+                <div className="h-2 w-16 rounded bg-[#1f1f23]" />
+              </div>
             </div>
           </div>
-          <div className="p-5">
-            <div className="flex items-start gap-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#D4A853] to-[#B8923A] text-sm font-semibold text-[#1a1a1a]">
-                Y
-              </div>
-              <div>
-                <p className="text-[14px] font-semibold text-[#F4F4F5]">You</p>
-                <p className="text-[12px] text-[#71717a]">Founder · Building with AI</p>
-              </div>
-            </div>
-            <div className="mt-4 space-y-2.5">
-              <div className="h-2.5 w-full rounded-md bg-[#2a2a2e]" />
-              <div className="h-2.5 w-full rounded-md bg-[#2a2a2e]" />
-              <div className="h-2.5 w-4/5 rounded-md bg-[#2a2a2e]" />
-              <div className="h-2.5 w-2/3 rounded-md bg-[#242428]" />
+          <div className="space-y-2.5 p-4">
+            <div className="h-2.5 w-full rounded bg-[#27272a]" />
+            <div className="h-2.5 w-[92%] rounded bg-[#27272a]" />
+            <div className="h-2.5 w-[78%] rounded bg-[#1f1f23]" />
+            <div className="h-2.5 w-[85%] rounded bg-[#1f1f23]" />
+            <div className="mt-4 flex gap-2">
+              <div className="h-5 w-14 rounded-full bg-[#38bdf8]/10" />
+              <div className="h-5 w-16 rounded-full bg-[#38bdf8]/10" />
+              <div className="h-5 w-12 rounded-full bg-[#38bdf8]/10" />
             </div>
           </div>
         </div>
-        <p className="mt-5 text-center text-[13px] text-[#71717a]">
-          Your post, hooks, and strategy appear here after you generate
-        </p>
+
+        <div className="mt-6 text-center">
+          <p className="text-[14px] font-medium text-[#d4d4d8]">Your package appears here</p>
+          <p className="mt-1.5 text-[13px] leading-relaxed text-[#52525b]">
+            Add source material and hit Generate.
+          </p>
+          <div className="mt-4 flex flex-wrap justify-center gap-1.5">
+            {outputs.map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-[#27272a] bg-[#0c0c0e] px-2.5 py-1 text-[11px] text-[#71717a]"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -267,10 +291,24 @@ function EmptyState() {
 
 function LoadingState() {
   return (
-    <div className="flex h-full items-center justify-center p-8">
-      <div className="flex items-center gap-3 text-[13px] text-[#8A8A8E]">
-        <RefreshCw className="h-4 w-4 animate-spin" />
-        Generating…
+    <div className="relative flex h-full items-center justify-center overflow-hidden p-8">
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#38bdf8]/[0.06] blur-[100px] animate-pulse" />
+
+      <div className="relative w-full max-w-md space-y-4">
+        <div className="overflow-hidden rounded-xl border border-[#27272a] bg-[#0c0c0e]/80 p-4">
+          <div className="flex items-center gap-3">
+            <RefreshCw className="h-4 w-4 animate-spin text-[#38bdf8]" />
+            <span className="text-[14px] font-medium text-[#d4d4d8]">Generating your package…</span>
+          </div>
+          <div className="mt-4 space-y-2.5">
+            <div className="h-2.5 w-full animate-pulse rounded bg-[#27272a]" />
+            <div className="h-2.5 w-[90%] animate-pulse rounded bg-[#27272a]" style={{ animationDelay: "150ms" }} />
+            <div className="h-2.5 w-[75%] animate-pulse rounded bg-[#1f1f23]" style={{ animationDelay: "300ms" }} />
+          </div>
+        </div>
+        <p className="text-center text-[12px] text-[#52525b]">
+          Crafting post, hooks, strategy, and score
+        </p>
       </div>
     </div>
   );

@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, Loader2 } from "lucide-react";
+import { ChevronDown, ClipboardPaste, Compass, Globe, Loader2, Newspaper, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AngleFinder, type AngleResult } from "@/components/angle-finder";
+import { DocumentUpload } from "@/components/document-upload";
 import { NewsSearcher } from "@/components/news-searcher";
-import { TONE_OPTIONS, type ToneStyle } from "@/types";
+import { WebsiteSource } from "@/components/website-source";
+import { TONE_OPTIONS, type ArticlePreview, type NewsItem, type ToneStyle } from "@/types";
 
-export type SourceMode = "paste" | "search" | "angle";
+export type SourceMode = "paste" | "search" | "angle" | "url" | "upload";
 
 export interface InputFormState {
   sourceMode: SourceMode;
@@ -21,6 +23,10 @@ export interface InputFormState {
   audience: string;
   tone: ToneStyle;
   generateImage: boolean;
+  selectedNews: NewsItem | null;
+  useArticleImage: boolean;
+  articleImageUrl?: string;
+  uploadedFileName: string | null;
 }
 
 interface InputPanelProps {
@@ -37,11 +43,21 @@ Person A: If we could bridge internal conversations with industry news, that wou
 [TechCrunch · Model Release] OpenAI launches GPT-5 with native agent orchestration
 The new model introduces persistent task memory and multi-step tool use.`;
 
-const SOURCE_MODES: { id: SourceMode; label: string }[] = [
-  { id: "paste", label: "Paste Source" },
-  { id: "search", label: "Search AI News" },
-  { id: "angle", label: "Auto-Find Angle" },
+const SOURCE_MODES: {
+  id: SourceMode;
+  label: string;
+  hint: string;
+  icon: typeof ClipboardPaste;
+}[] = [
+  { id: "paste", label: "Paste", hint: "Notes & headlines", icon: ClipboardPaste },
+  { id: "search", label: "Search", hint: "AI news feed", icon: Newspaper },
+  { id: "angle", label: "Angle", hint: "Auto-find hook", icon: Compass },
+  { id: "url", label: "Website", hint: "Paste a URL", icon: Globe },
+  { id: "upload", label: "Upload", hint: "PDF or doc", icon: Upload },
 ];
+
+const fieldClass =
+  "w-full rounded-lg border border-[#27272a] bg-[#0c0c0e] px-3 py-2.5 text-[14px] text-[#fafafa] placeholder:text-[#52525b] transition-colors focus:border-[#38bdf8]/40 focus:outline-none focus:ring-1 focus:ring-[#38bdf8]/20";
 
 export function InputPanel({ form, onChange, onGenerate, loading }: InputPanelProps) {
   const [advancedOpen, setAdvancedOpen] = useState(false);
@@ -50,6 +66,8 @@ export function InputPanel({ form, onChange, onGenerate, loading }: InputPanelPr
     form.pasteSource.trim().length > 0 ||
     form.aiNews.trim().length > 0 ||
     form.transcript.trim().length > 0;
+
+  const activeTone = TONE_OPTIONS.find((t) => t.value === form.tone);
 
   function handleAngleResult(result: AngleResult) {
     onChange({
@@ -64,79 +82,139 @@ export function InputPanel({ form, onChange, onGenerate, loading }: InputPanelPr
 
   return (
     <div className="flex h-full flex-col">
-      <div className="scrollbar-thin flex-1 space-y-5 overflow-y-auto px-5 py-5">
-        <div className="flex items-start justify-between gap-3">
-          <p className="text-[13px] leading-relaxed text-[#a1a1aa]">Choose how to add source material.</p>
-          <button
-            type="button"
-            onClick={() =>
-              onChange({
-                sourceMode: "paste",
-                pasteSource: SAMPLE_PASTE,
-                aiNews: "",
-                transcript: "",
-                suggestedAngle: "",
-                angleRationale: "",
-                angleMode: null,
-              })
-            }
-            className="shrink-0 rounded-md border border-[#2a2a2e] bg-[#242428] px-2.5 py-1 text-[12px] text-[#d4d4d8] transition-colors hover:border-[#3f3f46] hover:text-[#F4F4F5]"
-          >
-            Load sample
-          </button>
-        </div>
-
-        {/* Source mode selector */}
-        <div className="flex rounded-lg border border-[#2a2a2e] bg-[#1a1a1d] p-1">
-          {SOURCE_MODES.map((mode) => (
+      <div className="scrollbar-thin flex-1 overflow-y-auto px-6 py-6">
+        {/* Source */}
+        <section className="rounded-xl border border-[#27272a] bg-[#0c0c0e]/50 p-4">
+          <div className="flex items-baseline justify-between gap-4">
+            <label className="flex items-center gap-2 text-[13px] font-medium text-[#fafafa]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#38bdf8] shadow-[0_0_6px_#38bdf8]" />
+              Source
+            </label>
             <button
-              key={mode.id}
               type="button"
-              onClick={() => onChange({ sourceMode: mode.id })}
-              className={cn(
-                "flex-1 rounded-md px-2 py-2 text-[11px] font-medium transition-all sm:text-[12px]",
-                form.sourceMode === mode.id
-                  ? "bg-[#242428] text-[#F4F4F5] shadow-sm"
-                  : "text-[#71717a] hover:text-[#a1a1aa]"
-              )}
+              onClick={() =>
+                onChange({
+                  sourceMode: "paste",
+                  pasteSource: SAMPLE_PASTE,
+                  aiNews: "",
+                  transcript: "",
+                  suggestedAngle: "",
+                  angleRationale: "",
+                  angleMode: null,
+                })
+              }
+              className="text-[12px] text-[#71717a] transition-colors hover:text-[#7dd3fc]"
             >
-              {mode.label}
+              Load sample
             </button>
-          ))}
-        </div>
+          </div>
 
-        <div className="rounded-xl border border-[#2a2a2e] bg-[#1e1e22] p-4 shadow-sm shadow-black/10">
-          {form.sourceMode === "paste" && (
-            <div className="space-y-2">
-              <label className="text-[13px] font-medium text-[#F4F4F5]">Paste source</label>
-              <p className="text-[12px] text-[#71717a]">
-                News, meeting notes, Slack thread, or any raw material.
-              </p>
-              <textarea
-                id="paste-source"
-                rows={10}
-                value={form.pasteSource}
-                onChange={(e) => onChange({ pasteSource: e.target.value })}
-                placeholder="Paste headlines, transcripts, notes…"
-                className="input-field min-h-[200px] font-mono text-[12px]"
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {SOURCE_MODES.map((mode) => {
+              const Icon = mode.icon;
+              const active = form.sourceMode === mode.id;
+              return (
+                <button
+                  key={mode.id}
+                  type="button"
+                  onClick={() => onChange({ sourceMode: mode.id })}
+                  className={cn(
+                    "flex flex-col items-start rounded-lg border px-3 py-2.5 text-left transition-all",
+                    active
+                      ? "border-[#38bdf8]/40 bg-[#38bdf8]/[0.08] shadow-[0_0_20px_rgba(56,189,248,0.12)]"
+                      : "border-[#27272a] bg-[#09090b] hover:border-[#3f3f46] hover:bg-[#0c0c0e]"
+                  )}
+                >
+                  <Icon
+                    className={cn(
+                      "h-4 w-4",
+                      active ? "text-[#7dd3fc]" : "text-[#52525b]"
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      "mt-2 text-[12px] font-medium",
+                      active ? "text-[#fafafa]" : "text-[#a1a1aa]"
+                    )}
+                  >
+                    {mode.label}
+                  </span>
+                  <span className="mt-0.5 text-[10px] text-[#52525b]">{mode.hint}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-4">
+            {form.sourceMode === "paste" && (
+              <div>
+                <textarea
+                  id="paste-source"
+                  value={form.pasteSource}
+                  onChange={(e) => onChange({ pasteSource: e.target.value })}
+                  placeholder="Headlines, meeting notes, transcript…"
+                  className={cn(fieldClass, "min-h-[200px] resize-none leading-relaxed bg-[#09090b]")}
+                />
+                {form.pasteSource.trim().length > 0 && (
+                  <p className="mt-1.5 text-right text-[11px] tabular-nums text-[#52525b]">
+                    {form.pasteSource.trim().length} chars
+                  </p>
+                )}
+              </div>
+            )}
+
+            {form.sourceMode === "search" && (
+              <NewsSearcher
+                value={form.aiNews}
+                selectedItem={form.selectedNews}
+                useArticleImage={form.useArticleImage}
+                onSelect={(item, text) =>
+                  onChange({
+                    aiNews: text,
+                    selectedNews: item,
+                    useArticleImage: !!item.imageUrl,
+                    articleImageUrl: item.imageUrl,
+                  })
+                }
+                onUseArticleImageChange={(useArticleImage) => onChange({ useArticleImage })}
               />
-            </div>
-          )}
+            )}
 
-          {form.sourceMode === "search" && (
-            <div className="space-y-2">
-              <label className="text-[13px] font-medium text-[#F4F4F5]">Search AI news</label>
-              <p className="text-[12px] text-[#71717a]">Find a story, then select it as your source.</p>
-              <NewsSearcher value={form.aiNews} onSelect={(text) => onChange({ aiNews: text })} />
-            </div>
-          )}
+            {form.sourceMode === "url" && (
+              <WebsiteSource
+                value={form.pasteSource}
+                articleImageUrl={form.articleImageUrl}
+                useArticleImage={form.useArticleImage}
+                onImport={(text, preview: ArticlePreview | null) =>
+                  onChange({
+                    pasteSource: text,
+                    aiNews: text,
+                    articleImageUrl: preview?.imageUrl,
+                    useArticleImage: !!preview?.imageUrl,
+                    selectedNews: null,
+                  })
+                }
+                onUseArticleImageChange={(useArticleImage) => onChange({ useArticleImage })}
+              />
+            )}
 
-          {form.sourceMode === "angle" && (
-            <div className="space-y-2">
-              <label className="text-[13px] font-medium text-[#F4F4F5]">Auto-find angle</label>
-              <p className="text-[12px] text-[#71717a]">
-                We match recent AI news to your topic and draft the angle for you.
-              </p>
+            {form.sourceMode === "upload" && (
+              <DocumentUpload
+                fileName={form.uploadedFileName}
+                onImport={(text, filename) =>
+                  onChange({
+                    pasteSource: text,
+                    transcript: text,
+                    uploadedFileName: filename,
+                    selectedNews: null,
+                    articleImageUrl: undefined,
+                    useArticleImage: false,
+                  })
+                }
+              />
+            )}
+
+            {form.sourceMode === "angle" && (
               <AngleFinder
                 topic={form.topic}
                 audience={form.audience}
@@ -157,92 +235,105 @@ export function InputPanel({ form, onChange, onGenerate, loading }: InputPanelPr
                 onSourceTextChange={(pasteSource) => onChange({ pasteSource })}
                 onResult={handleAngleResult}
               />
-            </div>
-          )}
-        </div>
-
-        <div>
-          <label className="mb-2 block text-[13px] font-medium text-[#F4F4F5]">Voice</label>
-          <div className="flex flex-wrap gap-2">
-            {TONE_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => onChange({ tone: opt.value })}
-                className={cn(
-                  "rounded-lg border px-3 py-1.5 text-[12px] font-medium transition-all",
-                  form.tone === opt.value
-                    ? "border-[#D4A853]/50 bg-[#D4A853]/15 text-[#E8C876]"
-                    : "border-[#2a2a2e] bg-[#242428] text-[#a1a1aa] hover:border-[#3f3f46] hover:text-[#F4F4F5]"
-                )}
-              >
-                {opt.label}
-              </button>
-            ))}
+            )}
           </div>
-        </div>
+        </section>
+
+        {/* Voice */}
+        <section className="mt-5 rounded-xl border border-[#27272a] bg-[#0c0c0e]/50 p-4">
+          <label className="flex items-center gap-2 text-[13px] font-medium text-[#fafafa]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#38bdf8] shadow-[0_0_6px_#38bdf8]" />
+            Voice
+          </label>
+
+          <div className="mt-3 grid grid-cols-2 gap-1.5">
+            {TONE_OPTIONS.map((opt) => {
+              const active = form.tone === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => onChange({ tone: opt.value })}
+                  className={cn(
+                    "rounded-lg border px-3 py-2 text-left transition-all",
+                    active
+                      ? "border-[#38bdf8]/40 bg-[#38bdf8]/[0.08] text-[#fafafa] shadow-[0_0_16px_rgba(56,189,248,0.1)]"
+                      : "border-transparent bg-[#09090b] text-[#71717a] hover:border-[#27272a] hover:text-[#a1a1aa]"
+                  )}
+                >
+                  <span className="text-[12px] font-medium">{opt.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {activeTone?.description && (
+            <p className="mt-3 rounded-lg border border-[#27272a] bg-[#09090b] px-3 py-2 text-[12px] text-[#71717a]">
+              {activeTone.description}
+            </p>
+          )}
+        </section>
 
         {form.sourceMode !== "angle" && (
-          <div className="rounded-xl border border-[#2a2a2e] bg-[#1e1e22]">
+          <div className="mt-5">
             <button
               type="button"
               onClick={() => setAdvancedOpen(!advancedOpen)}
-              className="flex w-full items-center justify-between px-4 py-3 text-left text-[13px] text-[#a1a1aa] hover:text-[#F4F4F5]"
+              className="flex items-center gap-1 text-[13px] text-[#71717a] transition-colors hover:text-[#a1a1aa]"
             >
-              <span>Advanced options</span>
-              <ChevronDown className={cn("h-4 w-4 transition-transform", advancedOpen && "rotate-180")} />
+              <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", advancedOpen && "rotate-180")} />
+              More options
             </button>
             {advancedOpen && (
-              <div className="space-y-3 border-t border-[#2a2a2e] px-4 pb-4 pt-3">
+              <div className="mt-3 space-y-2 rounded-xl border border-[#27272a] bg-[#0c0c0e]/50 p-4">
                 <input
                   type="text"
                   value={form.topic}
                   onChange={(e) => onChange({ topic: e.target.value })}
                   placeholder="Topic"
-                  className="input-field py-2 text-[13px]"
+                  className={fieldClass}
                 />
                 <input
                   type="text"
                   value={form.audience}
                   onChange={(e) => onChange({ audience: e.target.value })}
                   placeholder="Audience"
-                  className="input-field py-2 text-[13px]"
+                  className={fieldClass}
                 />
-                <label className="flex cursor-pointer items-center gap-2 text-[12px] text-[#a1a1aa]">
-                  <input
-                    type="checkbox"
-                    checked={form.generateImage}
-                    onChange={(e) => onChange({ generateImage: e.target.checked })}
-                    className="rounded border-[#3f3f46]"
-                  />
-                  Generate image (DALL-E)
-                </label>
               </div>
             )}
           </div>
         )}
       </div>
 
-      <div className="shrink-0 border-t border-[#2a2a2e] bg-[#1a1a1d]/90 px-5 py-4 backdrop-blur-sm">
+      <div className="shrink-0 border-t border-[#27272a] bg-[#0b0b0d] px-6 py-4">
         <button
           type="button"
           onClick={onGenerate}
           disabled={!hasSource || loading}
           className={cn(
-            "w-full rounded-xl py-2.5 text-[14px] font-semibold transition-all",
-            hasSource ? "btn-primary shadow-md shadow-[#D4A853]/15" : "cursor-not-allowed bg-[#242428] text-[#71717a]"
+            "group relative w-full overflow-hidden rounded-lg py-3 text-[14px] font-semibold transition-all",
+            hasSource && !loading
+              ? "bg-gradient-to-r from-[#38bdf8] to-[#0ea5e9] text-[#04121c] shadow-[0_0_24px_rgba(56,189,248,0.25)] hover:shadow-[0_0_32px_rgba(56,189,248,0.4)]"
+              : "cursor-not-allowed bg-[#18181b] text-[#52525b]"
           )}
         >
           {loading ? (
-            <span className="inline-flex items-center gap-2">
+            <span className="inline-flex items-center justify-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin" />
               Generating…
             </span>
           ) : (
-            "Generate"
+            <span className="inline-flex items-center justify-center gap-2">
+              Generate
+              {hasSource && (
+                <kbd className="rounded border border-black/20 bg-black/10 px-1.5 py-0.5 text-[10px] font-medium">
+                  ⌘↵
+                </kbd>
+              )}
+            </span>
           )}
         </button>
-        {hasSource && <p className="mt-2 text-center text-[11px] text-[#71717a]">⌘ + Enter</p>}
       </div>
     </div>
   );

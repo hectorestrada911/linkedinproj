@@ -1,7 +1,6 @@
-/** Local editorial photography for the landing page — warm, minimal, not stock-AI slop */
+/** Local editorial photography for the landing page - warm, minimal, not stock-AI slop */
 
 export const LANDING_IMAGES = {
-  hero: { src: "/images/landing/hero.jpg", alt: "Warm minimal workspace with natural light" },
   pasteSource: { src: "/images/landing/paste-source.jpg", alt: "Hand writing notes in a journal" },
   searchNews: { src: "/images/landing/search-news.jpg", alt: "Reading the news over coffee" },
   findAngle: { src: "/images/landing/find-angle.jpg", alt: "Team discussion at a whiteboard" },
@@ -26,7 +25,7 @@ export const SOURCE_MODES = [
   {
     id: "angle",
     title: "Auto-Find Angle",
-    description: "Describe your topic — we match news and draft the angle.",
+    description: "Describe your topic. We match news and draft the angle.",
     image: LANDING_IMAGES.findAngle,
   },
 ] as const;
@@ -34,7 +33,7 @@ export const SOURCE_MODES = [
 export const WORKFLOW_STEPS = [
   {
     title: "Add sources",
-    body: "Paste, search, or auto-find an angle — three ways in, same pipeline out.",
+    body: "Paste, search, or auto-find an angle. Three ways in, same pipeline out.",
   },
   {
     title: "Pick a voice",

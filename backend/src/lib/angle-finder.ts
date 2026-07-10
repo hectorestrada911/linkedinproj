@@ -25,12 +25,12 @@ function buildMockAngle(input: FindAngleInput, newsText: string, headline: strin
   const source = input.sourceText?.trim();
 
   const angle = source
-    ? `Bridge "${topic}" with what your team already discussed — the gap isn't tooling, it's turning internal context into a timely industry take.`
+    ? `Bridge "${topic}" with what your team already discussed. The gap isn't tooling, it's turning internal context into a timely industry take.`
     : `Use ${headline} as the hook, then pivot to how ${topic} changes the workflow for builders shipping this week.`;
 
   const transcript = source
     ? source
-    : `Person A: Everyone is reacting to the news, but our angle on ${topic} is different.\nPerson B: We should connect what's happening in AI to what we're actually building — not another generic take.`;
+    : `Person A: Everyone is reacting to the news, but our angle on ${topic} is different.\nPerson B: We should connect what's happening in AI to what we're actually building, not another generic take.`;
 
   return {
     angle,
@@ -76,7 +76,7 @@ Respond ONLY with JSON: { "angle": string, "aiNews": string, "transcript": strin
           role: "user",
           content: `Topic: ${input.topic || "general AI"}
 Audience: ${input.audience || "founders and product leaders"}
-User source material: ${input.sourceText || "(none — infer from news)"}
+User source material: ${input.sourceText || "(none, infer from news)"}
 
 Recent AI news:
 ${newsText || headline}`,

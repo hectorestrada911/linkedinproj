@@ -25,7 +25,7 @@ const SPOTLIGHT = [
   {
     id: "package",
     tag: "Full package",
-    title: "Post, hooks, strategy, visuals — everything to hit publish.",
+    title: "Post, hooks, strategy, visuals. Everything to hit publish.",
     image:
       "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80",
     alt: "Content analytics dashboard",
@@ -110,7 +110,7 @@ export function SpotlightSection() {
             </div>
           </div>
 
-          {/* Pill controls — Apple shape, SignalPost colors */}
+          {/* Pill controls - Apple shape, SignalPost colors */}
           <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/[0.08] bg-[#0a0a0b]/60 px-4 py-2 backdrop-blur-md">
             {SPOTLIGHT.map((item, i) => (
               <button

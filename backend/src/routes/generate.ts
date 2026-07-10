@@ -23,6 +23,7 @@ const requestSchema = z.object({
     .optional(),
   previousPackage: z.any().optional(),
   generateImage: z.boolean().default(false),
+  sourceImageUrl: z.string().url().optional(),
 });
 
 generateRouter.post("/", async (req, res) => {
@@ -44,6 +45,8 @@ generateRouter.post("/", async (req, res) => {
     if (parsed.data.generateImage && contentPackage.imagePrompt) {
       const imageUrl = await generateImage(contentPackage.imagePrompt);
       if (imageUrl) contentPackage.imageUrl = imageUrl;
+    } else if (parsed.data.sourceImageUrl) {
+      contentPackage.imageUrl = parsed.data.sourceImageUrl;
     }
 
     res.json({

@@ -1,47 +1,82 @@
-import Image from "next/image";
-import Link from "next/link";
-import { LANDING_IMAGES } from "@/lib/landing-images";
+"use client";
+
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { HeroBackground } from "@/components/landing/hero-background";
+import { HeroDemoAnimation } from "@/components/landing/hero-demo-animation";
+import { GhostLink, PrimaryLink } from "@/components/landing/landing-ui";
+
+const rise = {
+  hidden: { opacity: 0, y: 20, filter: "blur(8px)" },
+  show: { opacity: 1, y: 0, filter: "blur(0px)" },
+};
 
 export function Hero() {
   return (
-    <section className="relative min-h-[88vh] overflow-hidden bg-[#121214]">
-      <div className="absolute inset-0">
-        <Image
-          src={LANDING_IMAGES.hero.src}
-          alt={LANDING_IMAGES.hero.alt}
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#121214] via-[#121214]/85 to-[#121214]/20" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#121214] via-transparent to-[#121214]/40" />
-      </div>
+    <section className="relative min-h-[100svh] overflow-hidden bg-[#050505]">
+      <HeroBackground />
 
-      <div className="relative mx-auto flex min-h-[88vh] max-w-6xl flex-col justify-end px-6 pb-20 pt-32">
-        <p className="max-w-xl text-[13px] font-medium uppercase tracking-[0.18em] text-[#a1a1aa]">
-          LinkedIn content studio
-        </p>
-        <h1 className="mt-4 max-w-2xl font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.08] tracking-tight text-[#F4F4F5] sm:text-5xl md:text-6xl">
-          Turn team context and AI news into posts worth publishing.
-        </h1>
-        <p className="mt-5 max-w-lg text-[16px] leading-relaxed text-[#a1a1aa]">
-          Paste a source, search headlines, or auto-find an angle — then generate a full
-          LinkedIn package in one pass.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link
-            href="/studio"
-            className="rounded-lg bg-[#F4F4F5] px-6 py-3 text-[14px] font-medium text-[#121214] transition-colors hover:bg-white"
+      <div className="relative mx-auto flex min-h-[100svh] max-w-[1280px] items-center px-6 pb-16 pt-24 lg:pt-28">
+        <div className="grid w-full items-center gap-12 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
+          {/* Left - copy */}
+          <motion.div
+            initial="hidden"
+            animate="show"
+            transition={{ staggerChildren: 0.1, delayChildren: 0.1 }}
+            className="text-left"
           >
-            Open Studio
-          </Link>
-          <Link
-            href="#sources"
-            className="rounded-lg border border-[#3f3f46] bg-[#121214]/50 px-6 py-3 text-[14px] font-medium text-[#d4d4d8] backdrop-blur-sm transition-colors hover:border-[#52525b] hover:text-[#F4F4F5]"
+            <motion.div
+              variants={rise}
+              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#38bdf8]/25 bg-[#050505]/50 px-4 py-1.5 backdrop-blur-xl"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-[#38bdf8] shadow-[0_0_8px_#38bdf8]" />
+              <span className="text-[12px] font-medium text-[#7dd3fc]">
+                From article to LinkedIn post in minutes
+              </span>
+            </motion.div>
+
+            <motion.h1
+              variants={rise}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="max-w-[640px] text-[clamp(2.5rem,5.5vw,4.25rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-[#fafafa]"
+            >
+              <span className="bg-gradient-to-r from-[#7dd3fc] via-[#38bdf8] to-[#0ea5e9] bg-clip-text text-transparent">
+                LinkedIn posts instantly:
+              </span>
+            </motion.h1>
+
+            <motion.p
+              variants={rise}
+              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-6 max-w-[480px] text-[17px] leading-[1.65] text-[#a1a1aa]"
+            >
+              SignalPost turns a URL, headline, or doc into a LinkedIn post that builds
+              reach and credibility, in your voice, while the story is still relevant.
+            </motion.p>
+
+            <motion.div
+              variants={rise}
+              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-9 flex flex-wrap items-center gap-3"
+            >
+              <PrimaryLink href="/studio" className="gap-2">
+                Open Studio
+                <ArrowRight className="h-4 w-4" />
+              </PrimaryLink>
+              <GhostLink href="#sources">See how it works</GhostLink>
+            </motion.div>
+          </motion.div>
+
+          {/* Right - live demo animation */}
+          <motion.div
+            initial={{ opacity: 0, x: 24, filter: "blur(12px)" }}
+            animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.85, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="flex justify-center lg:justify-end"
           >
-            See source modes
-          </Link>
+            <HeroDemoAnimation />
+          </motion.div>
         </div>
       </div>
     </section>

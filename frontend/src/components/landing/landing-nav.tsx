@@ -3,18 +3,19 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { PrimaryLink } from "@/components/landing/landing-ui";
 
 const NAV = [
   { label: "Sources", href: "#sources" },
   { label: "Workflow", href: "#workflow" },
-  { label: "Capabilities", href: "#capabilities" },
+  { label: "Product", href: "#product" },
 ];
 
 export function LandingNav() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -23,35 +24,35 @@ export function LandingNav() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b transition-colors duration-300",
+        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
         scrolled
-          ? "border-[#2a2a2e] bg-[#121214]/90 backdrop-blur-md"
-          : "border-transparent bg-transparent"
+          ? "border-b border-[#38bdf8]/10 bg-[#050505]/85 backdrop-blur-xl backdrop-saturate-150"
+          : "border-b border-transparent bg-transparent"
       )}
     >
-      <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
-        <Link href="/" className="text-[15px] font-semibold tracking-tight text-[#F4F4F5]">
+      <nav className="mx-auto flex h-[52px] max-w-[1200px] items-center justify-between px-6">
+        <Link
+          href="/"
+          className="text-[14px] font-semibold tracking-[-0.02em] text-[#fafafa]"
+        >
           SignalPost
         </Link>
 
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex">
           {NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="text-[13px] text-[#a1a1aa] transition-colors hover:text-[#F4F4F5]"
+              className="rounded-md px-3 py-1.5 text-[13px] text-[#71717a] transition-colors hover:text-[#7dd3fc]"
             >
               {item.label}
             </Link>
           ))}
         </div>
 
-        <Link
-          href="/studio"
-          className="rounded-lg bg-[#F4F4F5] px-4 py-2 text-[13px] font-medium text-[#121214] transition-colors hover:bg-white"
-        >
+        <PrimaryLink href="/studio" className="px-4 py-1.5 text-[13px]">
           Open Studio
-        </Link>
+        </PrimaryLink>
       </nav>
     </header>
   );

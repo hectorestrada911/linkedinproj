@@ -1,6 +1,6 @@
 # SignalPost
 
-LinkedIn content generator — split into a **Next.js frontend** and an **Express backend**.
+LinkedIn content generator, split into a **Next.js frontend** and an **Express backend**.
 
 ## Structure
 
@@ -49,6 +49,20 @@ npm run dev
 | `NEXT_PUBLIC_API_URL` | Backend URL (default http://localhost:4000) |
 
 Works end-to-end without API keys via mock generation.
+
+### Local testing with OpenAI (keys stay on your machine)
+
+1. Copy `backend/.env.example` → `backend/.env`
+2. Paste your OpenAI key into `backend/.env` only. This file is gitignored
+3. Run `npm run dev` and generate in Studio
+
+**Never commit `backend/.env`.** Before deploying, run:
+
+```bash
+npm run check-secrets
+```
+
+Set `OPENAI_API_KEY` in your host's environment dashboard (Railway, Render, etc.), not in the repo.
 
 ## Scripts
 
